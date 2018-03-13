@@ -23,11 +23,11 @@ public class ResourceController : MonoBehaviour
     {
         Resource.amount += amount;
         Resource.Trigger();
-        var buttons = this.GetComponentsInChildren<Button>();
-        foreach (var button in buttons)
-        {
-            button.interactable = false;
-        }
+//        var buttons = this.GetComponentsInChildren<Button>();
+//        foreach (var button in buttons)
+//        {
+//            button.interactable = false;
+//        }
     }
 
     public void RemoveGold(float amount)
