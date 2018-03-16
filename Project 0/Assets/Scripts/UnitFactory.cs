@@ -12,10 +12,10 @@ namespace Assets.Scripts
         public GameObject Prefab;
         public Grid Grid;
         public int InitialSpawns;
-
+        private Player _owner;
         void Start()
         {
-            StartCoroutine(LateStart(2));
+            //StartCoroutine(LateStart(2));
         }
 
         IEnumerator LateStart(float waitTime)
@@ -29,7 +29,18 @@ namespace Assets.Scripts
         }
         public void SpawnUnit()
         {
-            Grid.SpawnUnit(Prefab);
+            this._owner = GetComponentInParent<Player>();
+            if (this._owner == null)
+                Debug.LogError("Owner not found in Hierancy");
+            Grid.SpawnUnit(Prefab, _owner);
+        }
+
+        public void SpawnUnit(Tile tile)
+        {
+            this._owner = GetComponentInParent<Player>();
+            if (this._owner == null)
+                Debug.LogError("Owner not found in Hierancy");
+            Grid.SpawnUnit(Prefab, _owner, tile);
         }
     }
 }

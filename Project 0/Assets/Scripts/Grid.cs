@@ -15,11 +15,14 @@ namespace Assets.Scripts
         private List<GameObject> TopTiles;
         public GameObject TilePrefab;
         public GameObject FloorRoot;
+        public GameObject UnitPrefeb;
         public int max;
+        public bool SpawnMode;
         public void Start()
         {
             Generate();
         }
+
         public void AddTile(GameObject tile)
         {
             this.Tiles.Add(tile);
@@ -64,12 +67,36 @@ namespace Assets.Scripts
 
             return tile;
         }
-        public void SpawnUnit(GameObject gameObject)
+        public void SpawnUnit(GameObject gameObject, Player player)
         {
             var tile = GetEmtpyTile();
             var position = tile.transform.position;
             position.y += (float) 1.5;
-            Instantiate(gameObject, position, Quaternion.identity, tile.transform);
+            var gameObjectSpawned = Instantiate(gameObject, position, Quaternion.identity, tile.transform);
+            var playerOwned = gameObjectSpawned.GetComponent<PlayerOwned>();
+            playerOwned.Owner = player;
+            playerOwned.SetMaterial();
+        }
+
+        public void SpawnUnit(GameObject gameObject, Player player, Tile tile)
+        {
+            if (tile != null)
+            {
+                if (!TopTiles.Contains(tile.gameObject))
+                    tile = TopTiles.FirstOrDefault(x =>
+                        x.transform.position.x.Equals(tile.transform.position.x) &&
+                        x.transform.position.z.Equals(tile.transform.position.z)).GetComponent<Tile>();
+                if (!tile.gameObject.GetComponentInChildren<PlayerOwned>())
+                {
+                    var position = tile.transform.position;
+                    position.y += (float)1.5;
+                    var gameObjectSpawned = Instantiate(gameObject, position, Quaternion.identity, tile.transform);
+                    var playerOwned = gameObjectSpawned.GetComponent<PlayerOwned>();
+                    playerOwned.Owner = player;
+                    playerOwned.SetMaterial();
+                }
+            }
+
         }
         public void Generate()
         {

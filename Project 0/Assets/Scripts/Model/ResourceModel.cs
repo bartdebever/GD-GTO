@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ResourceModel : MonoBehaviour
 {
-    public string name;
+    public string resourceName;
     public float amount;
     public string description;
     public float initial;
