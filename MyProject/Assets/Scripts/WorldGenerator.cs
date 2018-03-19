@@ -11,6 +11,8 @@ public class WorldGenerator : MonoBehaviour
 
     public int XMax;
     public int ZMax;
+    public int XMin;
+    public int ZMin;
     public int YMax;
     public int PickupAmount;
 
@@ -23,9 +25,9 @@ public class WorldGenerator : MonoBehaviour
 
     void Generate()
     {
-        for (int x = 0; x < XMax; x++)
+        for (int x = XMin; x < XMax; x++)
         {
-            for (int z = 0; z < ZMax; z++)
+            for (int z = ZMin; z < ZMax; z++)
             {
                 var gameObjectTile = Tile.GetComponent<TileScript>().Initialize(x, z, 0, transform);
                 this.Grid.AddTile(gameObjectTile.GetComponent<TileScript>());
