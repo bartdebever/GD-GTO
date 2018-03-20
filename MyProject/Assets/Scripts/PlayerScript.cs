@@ -10,6 +10,7 @@ public class PlayerScript : MonoBehaviour
     public bool UsedMove = false;
     public Color BaseColor, BlinkColor;
     public Text MultiplierText;
+    public Text HealthText;
     public int Health = 3;
     public int Multiplier = 1;
 	// Use this for initialization
@@ -19,13 +20,9 @@ public class PlayerScript : MonoBehaviour
 
     public void GetHit(int damage)
     {
-        if (damage > 0)
+        if (damage >= 0)
         {
             Health -= damage;
-//            if (Health < 0)
-//            {
-//                Destroy(this.gameObject);
-//            }
             UpdateGui();
         }
         
@@ -33,6 +30,6 @@ public class PlayerScript : MonoBehaviour
 
     private void UpdateGui()
     {
-        
+        HealthText.text = "Health: s" + Health;
     }
 }
