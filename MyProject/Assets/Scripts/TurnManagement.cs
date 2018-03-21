@@ -26,93 +26,97 @@ public class TurnManagement : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-	    time += Time.deltaTime;
-        Slider1.transform.Translate(0, -(Time.deltaTime * 900 * (1/Bpm)),0);
-	    Slider2.transform.Translate(0, (Time.deltaTime * 900 * (1/Bpm)), 0);
-	    foreach (var player in Players)
+	    if (Game.IsRunning())
 	    {
-	        if (time >= Bpm - Offset && !player.UsedMove)
-	        {
-	            if (!player.ColorChange)
-	            {
-	                player.gameObject.GetComponent<Renderer>().material.color = player.BlinkColor;
-	                player.ColorChange = true;
-	            }
+            time += Time.deltaTime;
+            Slider1.transform.Translate(0, -(Time.deltaTime * 900 * (1 / Bpm)), 0);
+            Slider2.transform.Translate(0, (Time.deltaTime * 900 * (1 / Bpm)), 0);
+            foreach (var player in Players)
+            {
+                if (time >= Bpm - Offset && !player.UsedMove)
+                {
+                    if (!player.ColorChange)
+                    {
+                        player.gameObject.GetComponent<Renderer>().material.color = player.BlinkColor;
+                        player.ColorChange = true;
+                    }
 
-	            Vector3 vector = new Vector3(0, 0, 0);
-	            if (Input.GetKeyDown(player.Right))
-	            {
-	                vector = new Vector3(1, 0, 0);
-	            }
+                    Vector3 vector = new Vector3(0, 0, 0);
+                    if (Input.GetKeyDown(player.Right))
+                    {
+                        vector = new Vector3(1, 0, 0);
+                    }
 
-	            if (Input.GetKeyDown(player.Down))
-	            {
-	                vector = new Vector3(0, 0, -1);
-	            }
-	            if (Input.GetKeyDown(player.Up))
-	            {
-	                vector = new Vector3(0, 0, 1);
-	            }
-	            if (Input.GetKeyDown(player.Left))
-	            {
-	                vector = new Vector3(-1, 0, 0);
-	            }
+                    if (Input.GetKeyDown(player.Down))
+                    {
+                        vector = new Vector3(0, 0, -1);
+                    }
+                    if (Input.GetKeyDown(player.Up))
+                    {
+                        vector = new Vector3(0, 0, 1);
+                    }
+                    if (Input.GetKeyDown(player.Left))
+                    {
+                        vector = new Vector3(-1, 0, 0);
+                    }
 
-	            if (!vector.Equals(new Vector3(0, 0, 0)))
-	            {
-	                var position = player.gameObject.transform.position;
-	                position += vector;
-	                var playerHit = Players.FirstOrDefault(x =>
-	                    x.gameObject.transform.position.x.Equals(position.x) && x.gameObject.transform.position.z.Equals(position.z));
+                    if (!vector.Equals(new Vector3(0, 0, 0)))
+                    {
+                        var position = player.gameObject.transform.position;
+                        position += vector;
+                        var playerHit = Players.FirstOrDefault(x =>
+                            x.gameObject.transform.position.x.Equals(position.x) && x.gameObject.transform.position.z.Equals(position.z));
 
-	                if (grid.MoveTo(position.x, position.z) && playerHit == null)
-	                {
-	                    player.gameObject.transform.Translate(vector);
-	                }
-                    else if (playerHit != null)
-	                {
-	                    playerHit.GetHit(1);
-	                    if (playerHit.Health < 0)
-	                    {
-                            Destroy(playerHit.gameObject);
-	                        Players.Remove(playerHit);
-	                        break;
-	                    }
-	                }
+                        if (grid.MoveTo(position.x, position.z) && playerHit == null)
+                        {
+                            player.gameObject.transform.Translate(vector);
+                        }
+                        else if (playerHit != null)
+                        {
+                            playerHit.GetHit(1);
+                            if (playerHit.Health < 0)
+                            {
+                                Destroy(playerHit.gameObject);
+                                Players.Remove(playerHit);
+                                break;
+                            }
+                        }
 
-	                player.UsedMove = true;
-	                if (player.Multiplier <= 2)
-	                    player.Multiplier++;
-	                UpdateGui(player.MultiplierText, player.Multiplier);
-	            }
-	        }
-	        else if (Input.anyKeyDown)
-	        {
-	            player.Multiplier = 1;
-	            UpdateGui(player.MultiplierText, player.Multiplier);
-	        }
-
-	        if (time >= Bpm) 
-	        {
-	            if (!player.UsedMove)
-	            {
-	                player.Multiplier = 1;
-	                UpdateGui(player.MultiplierText, player.Multiplier);
-	            }
-	            player.UsedMove = false;
-	            if (this.Players.IndexOf(player) == Players.Count - 1)
-	            {
-	                this.time = 0.0f;
-	                Slider1.transform.position = new Vector3(0, 100, 0);
-	                Slider2.transform.position = new Vector3(1920, 100, 0);
+                        player.UsedMove = true;
+                        if (player.Multiplier <= 2)
+                            player.Multiplier++;
+                        UpdateGui(player.MultiplierText, player.Multiplier);
+                    }
                 }
-	                
-	            player.gameObject.GetComponent<Renderer>().material.color = player.BaseColor;
-	            player.ColorChange = false;
+                else if (Input.anyKeyDown)
+                {
+                    player.Multiplier = 1;
+                    UpdateGui(player.MultiplierText, player.Multiplier);
+                }
 
-	        }
-            
+                if (time >= Bpm)
+                {
+                    if (!player.UsedMove)
+                    {
+                        player.Multiplier = 1;
+                        UpdateGui(player.MultiplierText, player.Multiplier);
+                    }
+                    player.UsedMove = false;
+                    if (this.Players.IndexOf(player) == Players.Count - 1)
+                    {
+                        this.time = 0.0f;
+                        Slider1.transform.position = new Vector3(0, 100, 0);
+                        Slider2.transform.position = new Vector3(1920, 100, 0);
+                    }
+
+                    player.gameObject.GetComponent<Renderer>().material.color = player.BaseColor;
+                    player.ColorChange = false;
+
+                }
+
+            }
         }
+
 
         
     }

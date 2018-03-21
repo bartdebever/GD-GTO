@@ -4,18 +4,19 @@ using UnityEngine;
 
 public class WorldGenerator : MonoBehaviour
 {
+    [Header("Prefabs")]
     public GameObject Tile;
     public GameObject Pickup;
-
+    [Header("Grid Container")]
     public GridContainer Grid;
-
+    [Header("Generation Size")]
     public int XMax;
     public int ZMax;
     public int XMin;
     public int ZMin;
     public int YMax;
+    [Header("Generation Modifiers")]
     public int PickupAmount;
-
     public bool GenerateHills;
 	// Use this for initialization
 	void Start ()

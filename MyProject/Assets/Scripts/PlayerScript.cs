@@ -5,11 +5,16 @@ using UnityEngine.UI;
 
 public class PlayerScript : MonoBehaviour
 {
-    public KeyCode Up, Down, Left, Right;
+    [Header("Controls")] public KeyCode Up;
+    public KeyCode Down, Left, Right;
+    [Header("States")]
     public bool ColorChange = false;
     public bool UsedMove = false;
-    public Color BaseColor, BlinkColor;
+    [Header("Colors")] public Color BaseColor;
+    public Color BlinkColor;
+    [Header("UI")]
     public Text MultiplierText;
+    [Header("Base Statistics")]
     public int Health = 3;
     public int Multiplier = 1;
 	// Use this for initialization
