@@ -6,6 +6,8 @@ using UnityEngine;
 public class GridContainer : MonoBehaviour
 {
     private List<TileScript> Tiles;
+
+    private List<TileScript> Walls;
 	// Use this for initialization
 	void Start () {
 		
@@ -19,6 +21,11 @@ public class GridContainer : MonoBehaviour
     public void InitList()
     {
         this.Tiles = new List<TileScript>();
+    }
+
+    public List<TileScript> GetWalls()
+    {
+        return Walls;
     }
     public void AddTile(TileScript tile)
     {
@@ -34,12 +41,34 @@ public class GridContainer : MonoBehaviour
         Tiles.AddRange(tiles);
     }
 
+    public void AddWall(TileScript wall)
+    {
+        if(this.Walls == null)
+            this.Walls = new List<TileScript>();
+        this.Walls.Add(wall);
+    }
+
+    public void RemoveTile(Vector3 position)
+    {
+        var tile = Tiles.FirstOrDefault(x => x.gameObject.transform.position.Equals(position));
+        if (tile != null)
+        {
+            Tiles.Remove(tile);
+            Destroy(tile.gameObject);
+        }
+        var wall = Walls.FirstOrDefault(x => x.gameObject.transform.position.Equals(position));
+        if (wall != null)
+        {
+            Walls.Remove(wall);
+            Destroy(wall.gameObject);
+        }
+    }
+
     public List<TileScript> GetTiles()
     {
         return Tiles;
     }
-
-    public bool MoveTo(float x, float z)
+    public bool MoveTo(float x, float z, PlayerScript player)
     {
         var tile = Tiles.FirstOrDefault(obj =>
             obj.transform.position.x.Equals(x) && obj.transform.position.z.Equals(z));
@@ -50,6 +79,14 @@ public class GridContainer : MonoBehaviour
             {
                 Destroy(resource.gameObject);
                 //Add resource to player
+            }
+
+            var enemy = tile.GetComponentInChildren<EnemyScript>();
+            if (enemy != null)
+            {
+                enemy.GetHit(player.Attack);
+                if (enemy.Health > 0)
+                    return false;
             }
 
             return true;

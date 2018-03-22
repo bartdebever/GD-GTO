@@ -18,6 +18,8 @@ public class PlayerScript : MonoBehaviour
     [Header("Base Statistics")]
     public int Health = 3;
     public int Multiplier = 1;
+
+    public int Attack = 1;
 	// Use this for initialization
 	void Start () {
 		
@@ -35,6 +37,6 @@ public class PlayerScript : MonoBehaviour
 
     private void UpdateGui()
     {
-        HealthText.text = "Health: s" + Health;
+        HealthText.text = "Health: " + Health;
     }
 }

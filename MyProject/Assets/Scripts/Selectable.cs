@@ -5,14 +5,15 @@ using UnityEngine;
 public class Selectable : MonoBehaviour
 {
     public bool IsSelected;
+    public Color BaseColor, SelectedColor;
 
     public void OnSelected()
     {
-        this.gameObject.GetComponent<Renderer>().material.color = Color.red;
+        this.gameObject.GetComponent<Renderer>().material.color = SelectedColor;
     }
 
     public void OnDeselected()
     {
-        this.gameObject.GetComponent<Renderer>().material.color = Color.white;
+        this.gameObject.GetComponent<Renderer>().material.color = BaseColor;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts;
 using UnityEngine;
 
 public class WorldGenerator : MonoBehaviour
@@ -7,8 +8,12 @@ public class WorldGenerator : MonoBehaviour
     [Header("Prefabs")]
     public GameObject Tile;
     public GameObject Pickup;
-    [Header("Grid Container")]
+    public GameObject Enemy;
+    [Header("Containers and Controllers")]
     public GridContainer Grid;
+
+    public ShopScript Shop;
+    public EnemyController EnemyController;
     [Header("Generation Size")]
     public int XMax;
     public int ZMax;
@@ -18,10 +23,26 @@ public class WorldGenerator : MonoBehaviour
     [Header("Generation Modifiers")]
     public int PickupAmount;
     public bool GenerateHills;
-	// Use this for initialization
-	void Start ()
+    
+
+    public int Enemies;
+    [Header("Cameras")] public Camera PauseCamera;
+    // Use this for initialization
+    void Start ()
 	{
 	    Generate();
+	    int ShopX = XMax;
+	    if (XMin < 0)
+	        ShopX += -XMin;
+	    else
+	        ShopX += XMin;
+	    int shopZ = ZMax;
+	    if (ZMin < 0)
+	        ShopX += -ZMin;
+	    else
+	        ShopX += ZMin;
+        Shop.Spawn(new Vector3(0 - Shop.XSize/2f, 0, shopZ));
+        PauseCamera.transform.position = new Vector3(0, 20, 0);
 	}
 
     void Generate()
@@ -34,14 +55,76 @@ public class WorldGenerator : MonoBehaviour
                 this.Grid.AddTile(gameObjectTile.GetComponent<TileScript>());
             }
         }
-        for(int i = 0; i < PickupAmount; i++)
+        var tiles = Grid.GetTiles();
+        for (int i = 0; i < PickupAmount; i++)
         {
-            var tiles = Grid.GetTiles();
             var tile = tiles[Random.Range(0, tiles.Count)];
             if (tile != null)
             {
                 tile.SpawnPickup(Pickup);
             }
         }
+
+        for (int i = 0; i < Enemies; i++)
+        {
+            var tile = tiles[Random.Range(0, tiles.Count)];
+            if (tile != null)
+            {
+                var position = tile.transform.position;
+                var enemy = Enemy.GetComponent<EnemyScript>().Initialize(position.x, position.z, position.y + 1.5f, tile.transform);
+                EnemyController.AddEnemy(enemy.GetComponent<EnemyScript>());
+            }
+        }
+
+        GenerateWalls();
+    }
+
+    void GenerateWalls()
+    {
+        for (int h = 0; h < 2; h++)
+        {
+            for (int x = XMin; x < XMax; x++)
+            {
+                for (int i = 0; i<2; i++)
+                {
+                    if (i == 0)
+                    {
+                        var wall = Tile.GetComponent<TileScript>().Initialize(x, ZMin-1, h, transform);
+                        wall.GetComponent<Renderer>().material.color = Color.gray;
+                        Grid.AddWall(wall.GetComponent<TileScript>());
+                    }
+                    else
+                    {
+                        var wall = Tile.GetComponent<TileScript>().Initialize(x, ZMax, h, transform);
+                        wall.GetComponent<Renderer>().material.color = Color.grey;
+                        Grid.AddWall(wall.GetComponent<TileScript>());
+                    }
+                        
+
+                }
+            }
+
+            for (int z = ZMin; z < ZMax; z++)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    if (i == 0)
+                    {
+                        var wall = Tile.GetComponent<TileScript>().Initialize(XMin-1, z, h, transform);
+                        wall.GetComponent<Renderer>().material.color = Color.gray;
+                        Grid.AddWall(wall.GetComponent<TileScript>());
+                    }
+                    else
+                    {
+                        var wall = Tile.GetComponent<TileScript>().Initialize(XMax, z, h, transform);
+                        wall.GetComponent<Renderer>().material.color = Color.grey;
+                        Grid.AddWall(wall.GetComponent<TileScript>());
+                    }
+
+
+                }
+            }
+        }
+
     }
 }
