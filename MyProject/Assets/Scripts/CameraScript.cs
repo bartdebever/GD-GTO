@@ -27,18 +27,12 @@ public class CameraScript : MonoBehaviour
 	    {
 	        if (Game.IsRunning())
 	        {
-	            Game.Pause();
-	            PausePanel.gameObject.SetActive(true);
-	            PauseCamera.gameObject.SetActive(true);
-                Game.SetCurrentCamera(PauseCamera);
-            }
+	            PauseGame();
+	        }
 
 	        else
 	        {
-	            Game.Play();
-	            PausePanel.gameObject.SetActive(false);
-                PauseCamera.gameObject.SetActive(false);
-                Game.SetCurrentCamera(null);
+	           PlayGame();
 	        }
                 
 
@@ -56,19 +50,19 @@ public class CameraScript : MonoBehaviour
 	            PauseCamera.transform.Translate(0, 0, -2);
             }
 
-	        if (Input.GetKeyDown(KeyCode.W))
+	        if (Input.GetKey(KeyCode.W))
 	        {
                 PauseCamera.transform.Translate(0,2,0);
 	        }
-	        if (Input.GetKeyDown(KeyCode.S))
+	        if (Input.GetKey(KeyCode.S))
 	        {
 	            PauseCamera.transform.Translate(0, -2, 0);
 	        }
-	        if (Input.GetKeyDown(KeyCode.D))
+	        if (Input.GetKey(KeyCode.D))
 	        {
 	            PauseCamera.transform.Translate(2, 0, 0);
 	        }
-	        if (Input.GetKeyDown(KeyCode.A))
+	        if (Input.GetKey(KeyCode.A))
 	        {
 	            PauseCamera.transform.Translate(-2, 0, 0);
 	        }
@@ -89,5 +83,21 @@ public class CameraScript : MonoBehaviour
             Camera2.enabled = false;
             SplitScreen = false;
         }
+    }
+
+    public void PlayGame()
+    {
+        Game.Play();
+        PausePanel.gameObject.SetActive(false);
+        PauseCamera.gameObject.SetActive(false);
+        Game.SetCurrentCamera(null);
+    }
+
+    void PauseGame()
+    {
+        Game.Pause();
+        PausePanel.gameObject.SetActive(true);
+        PauseCamera.gameObject.SetActive(true);
+        Game.SetCurrentCamera(PauseCamera);
     }
 }

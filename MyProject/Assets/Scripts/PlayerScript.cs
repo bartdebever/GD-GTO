@@ -18,8 +18,9 @@ public class PlayerScript : MonoBehaviour
     [Header("Base Statistics")]
     public int Health = 3;
     public int Multiplier = 1;
-
     public int Attack = 1;
+
+    private Vector3 moveBuffer = new Vector3(0, 0, 0);
 	// Use this for initialization
 	void Start () {
 		
@@ -38,5 +39,17 @@ public class PlayerScript : MonoBehaviour
     private void UpdateGui()
     {
         HealthText.text = "Health: " + Health;
+    }
+
+    public void SetMovementBuffer(Vector3 movement)
+    {
+        this.moveBuffer = movement;
+    }
+
+    public Vector3 GetMoveBuffer()
+    {
+        Vector3 result = moveBuffer;
+        moveBuffer = new Vector3(0,0,0);
+        return result;
     }
 }

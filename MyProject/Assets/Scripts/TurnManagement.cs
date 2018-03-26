@@ -47,29 +47,8 @@ public class TurnManagement : MonoBehaviour
 
 	                if (!vector.Equals(new Vector3(0, 0, 0)))
 	                {
-	                    var position = player.transform.position;
-	                    position += vector;
-	                    var playerHit = CheckPositionForPlayer(position);
-
-	                    if (grid.MoveTo(position.x, position.z, player) && playerHit == null)
-	                    {
-	                        player.gameObject.transform.Translate(vector);
-	                    }
-	                    else if (playerHit != null)
-	                    {
-	                        playerHit.GetHit(1);
-	                        if (playerHit.Health <= 0)
-	                        {
-	                            Destroy(playerHit.gameObject);
-	                            Players.Remove(playerHit);
-	                            break;
-	                        }
-	                    }
-
+                        player.SetMovementBuffer(vector);
 	                    player.UsedMove = true;
-	                    if (player.Multiplier <= 2)
-	                        player.Multiplier++;
-	                    UpdateGui(player.MultiplierText, player.Multiplier);
 	                }
 	            }
 	            else if (Input.anyKeyDown)
@@ -80,13 +59,14 @@ public class TurnManagement : MonoBehaviour
 
 	            if (time >= Bpm)
 	            {
-	                if (!enemyMove)
+	                NextTurn(player);
+                    if (!enemyMove)
 	                {
 	                    EnemyController.MoveEnemies();
 	                    enemyMove = true;
 	                }
 
-	                NextTurn(player);
+	                
 	            }
 
 	        }
@@ -128,11 +108,6 @@ public class TurnManagement : MonoBehaviour
             x.gameObject.transform.position.x.Equals(position.x) && x.gameObject.transform.position.z.Equals(position.z));
     }
 
-    private void UpdateSlider()
-    {
-
-    }
-
     private void NextTurn(PlayerScript player)
     {
         if (!player.UsedMove)
@@ -150,6 +125,33 @@ public class TurnManagement : MonoBehaviour
 
         player.gameObject.GetComponent<Renderer>().material.color = player.BaseColor;
         player.ColorChange = false;
+        var vector = player.GetMoveBuffer();
+        if (!vector.Equals(new Vector3(0, 0, 0)))
+        {
+            
+            var position = player.transform.position;
+            position += vector;
+            var playerHit = CheckPositionForPlayer(position);
+
+            if (grid.MoveTo(position.x, position.z, player) && playerHit == null)
+            {
+                player.gameObject.transform.Translate(vector);
+            }
+            else if (playerHit != null)
+            {
+                playerHit.GetHit(1);
+                if (playerHit.Health <= 0)
+                {
+                    Destroy(playerHit.gameObject);
+                    Players.Remove(playerHit);
+                    return;
+                }
+            }
+            if (player.Multiplier <= 2)
+                player.Multiplier++;
+            UpdateGui(player.MultiplierText, player.Multiplier);
+        }
+
     }
 
     private void ResetSliders()

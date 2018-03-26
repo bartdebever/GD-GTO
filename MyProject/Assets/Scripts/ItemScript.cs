@@ -6,7 +6,8 @@ public class ItemScript : MonoBehaviour
 {
     [Header("Statistics")]
     public int Attack;
-    public int Health, Movement;
+
+    public int Health, Movement, DigPower;
     [Header("Properties")]
     public int Durability;
     public bool PickedUp;

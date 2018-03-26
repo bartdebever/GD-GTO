@@ -6,7 +6,7 @@ using UnityEngine;
 public class EnemyScript : MonoBehaviour
 {
     [Header("Statistics")]
-    public int Health;
+    public int Health=2;
     public int Attack;
     public int Movement;
     public MoveType MovementType;

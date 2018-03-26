@@ -87,12 +87,12 @@ public class GridContainer : MonoBehaviour
                 enemy.GetHit(player.Attack);
                 if (enemy.Health > 0)
                     return false;
+                Destroy(enemy.gameObject);
             }
 
             return true;
         }
 
         return false;
-
     }
 }
