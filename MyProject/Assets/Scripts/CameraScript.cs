@@ -5,7 +5,9 @@ using UnityEngine.UI;
 public class CameraScript : MonoBehaviour
 {
     public Camera Camera1, Camera2, PauseCamera;
+    public bool UsePauseCamera = false;
     public Image PausePanel;
+    public Image OptionsPanel;
     [Tooltip("Indicates if the game will start in split-screen mode.")]
     public bool SplitScreen;
 	// Use this for initialization
@@ -89,15 +91,37 @@ public class CameraScript : MonoBehaviour
     {
         Game.Play();
         PausePanel.gameObject.SetActive(false);
-        PauseCamera.gameObject.SetActive(false);
-        Game.SetCurrentCamera(null);
+        OptionsPanel.gameObject.SetActive(false);
+        if (UsePauseCamera)
+        {
+            PauseCamera.gameObject.SetActive(false);
+            Game.SetCurrentCamera(null);
+        }
+
     }
 
     void PauseGame()
     {
         Game.Pause();
         PausePanel.gameObject.SetActive(true);
-        PauseCamera.gameObject.SetActive(true);
-        Game.SetCurrentCamera(PauseCamera);
+        if (UsePauseCamera)
+        {
+           
+            PauseCamera.gameObject.SetActive(true);
+            Game.SetCurrentCamera(PauseCamera);
+        }
+
+    }
+
+    public void OpenOptions()
+    {
+        PausePanel.gameObject.SetActive(false);
+        OptionsPanel.gameObject.SetActive(true);
+    }
+
+    public void CloseOptions()
+    {
+        PausePanel.gameObject.SetActive(true);
+        OptionsPanel.gameObject.SetActive(false);
     }
 }

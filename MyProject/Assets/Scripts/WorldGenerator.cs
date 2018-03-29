@@ -12,6 +12,8 @@ public class WorldGenerator : MonoBehaviour
     [Header("Containers and Controllers")]
     public GridContainer Grid;
 
+    public TerrainFilter TerrainFilter;
+
     public ShopScript Shop;
     public EnemyController EnemyController;
     [Header("Generation Size")]
@@ -42,6 +44,7 @@ public class WorldGenerator : MonoBehaviour
 	    else
 	        ShopX += ZMin;
         Shop.Spawn(new Vector3(0 - Shop.XSize/2f, 0, shopZ));
+        TerrainFilter.TextureTerain(Grid);
         PauseCamera.transform.position = new Vector3(0, 20, 0);
 	}
 

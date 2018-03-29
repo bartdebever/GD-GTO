@@ -160,4 +160,9 @@ public class TurnManagement : MonoBehaviour
         Slider2.transform.position = new Vector3(1920, 100, 0);
     }
 
+    public void SetBpm(float value)
+    {
+        this.Bpm = value;
+    }
+
 }
