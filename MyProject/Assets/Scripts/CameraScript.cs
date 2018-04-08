@@ -1,127 +1,22 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine;
-using UnityEngine.UI;
-public class CameraScript : MonoBehaviour
+
+namespace Assets.Scripts
 {
-    public Camera Camera1, Camera2, PauseCamera;
-    public bool UsePauseCamera = false;
-    public Image PausePanel;
-    public Image OptionsPanel;
-    [Tooltip("Indicates if the game will start in split-screen mode.")]
-    public bool SplitScreen;
-	// Use this for initialization
-	void Start () {
-	    if (!SplitScreen)
-	    {
-            Camera1.rect = new Rect(0,0,1,1);
-	        Camera2.enabled = false;
-	    }
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	    if (Input.GetKeyDown(KeyCode.Space))
-	    {
-	        ChangeScreen();
-	    }
-	    if (Input.GetKeyDown(KeyCode.Escape))
-	    {
-	        if (Game.IsRunning())
-	        {
-	            PauseGame();
-	        }
-
-	        else
-	        {
-	           PlayGame();
-	        }
-                
-
-        }
-
-	    if (!Game.IsRunning())
-	    {
-	        var d = Input.GetAxis("Mouse ScrollWheel");
-	        if (d > 0f)
-	        {
-	            PauseCamera.transform.Translate(0,0,2);
-	        }
-	        else if (d < 0f)
-	        {
-	            PauseCamera.transform.Translate(0, 0, -2);
-            }
-
-	        if (Input.GetKey(KeyCode.W))
-	        {
-                PauseCamera.transform.Translate(0,2,0);
-	        }
-	        if (Input.GetKey(KeyCode.S))
-	        {
-	            PauseCamera.transform.Translate(0, -2, 0);
-	        }
-	        if (Input.GetKey(KeyCode.D))
-	        {
-	            PauseCamera.transform.Translate(2, 0, 0);
-	        }
-	        if (Input.GetKey(KeyCode.A))
-	        {
-	            PauseCamera.transform.Translate(-2, 0, 0);
-	        }
-        }
-	}
-
-    void ChangeScreen()
+    public class CameraScript : MonoBehaviour
     {
-        if (!SplitScreen)
+        public float XModifier = 0;
+        public float ZModifier = 0;
+        public float YModifier = 0;
+        public float AngleModifier = 0;
+        public Vector3 BasePosition;
+        public void Start()
         {
-            Camera1.rect = new Rect(0, 0, 0.5f, 1);
-            Camera2.enabled = true;
-            SplitScreen = true;
-        }
-        else
-        {
-            Camera1.rect = new Rect(0,0,1,1);
-            Camera2.enabled = false;
-            SplitScreen = false;
-        }
-    }
-
-    public void PlayGame()
-    {
-        Game.Play();
-        PausePanel.gameObject.SetActive(false);
-        OptionsPanel.gameObject.SetActive(false);
-        if (UsePauseCamera)
-        {
-            PauseCamera.gameObject.SetActive(false);
-            Game.SetCurrentCamera(null);
+            this.BasePosition = this.gameObject.transform.position;
         }
 
-    }
-
-    void PauseGame()
-    {
-        Game.Pause();
-        PausePanel.gameObject.SetActive(true);
-        if (UsePauseCamera)
-        {
-           
-            PauseCamera.gameObject.SetActive(true);
-            Game.SetCurrentCamera(PauseCamera);
-        }
-
-    }
-
-    public void OpenOptions()
-    {
-        PausePanel.gameObject.SetActive(false);
-        OptionsPanel.gameObject.SetActive(true);
-    }
-
-    public void CloseOptions()
-    {
-        PausePanel.gameObject.SetActive(true);
-        OptionsPanel.gameObject.SetActive(false);
     }
 }

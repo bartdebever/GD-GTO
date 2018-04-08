@@ -23,6 +23,7 @@ public class TurnManagement : MonoBehaviour
     private bool enemyMove = false;
 	// Use this for initialization
 	void Start () {
+        Game.AddPlayers(Players);
 	}
 	
 	// Update is called once per frame
@@ -33,7 +34,7 @@ public class TurnManagement : MonoBehaviour
 	        time += Time.deltaTime;
 	        Slider1.transform.Translate(0, -(Time.deltaTime * 900 * (1 / Bpm)), 0);
 	        Slider2.transform.Translate(0, (Time.deltaTime * 900 * (1 / Bpm)), 0);
-	        foreach (var player in Players)
+	        foreach (var player in Game.GetPlayers())
 	        {
 	            if (time >= Bpm - Offset && !player.UsedMove)
 	            {

@@ -9,6 +9,7 @@ public class Selectable : MonoBehaviour
 
     public void OnSelected()
     {
+        BaseColor = this.gameObject.GetComponent<Renderer>().material.color;
         this.gameObject.GetComponent<Renderer>().material.color = SelectedColor;
     }
 

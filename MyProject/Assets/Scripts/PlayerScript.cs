@@ -21,6 +21,10 @@ public class PlayerScript : MonoBehaviour
     public int Attack = 1;
 
     private Vector3 moveBuffer = new Vector3(0, 0, 0);
+
+    public delegate void Died();
+
+    public event Died OnDying;
 	// Use this for initialization
 	void Start () {
 		
@@ -32,6 +36,12 @@ public class PlayerScript : MonoBehaviour
         {
             Health -= damage;
             UpdateGui();
+        }
+
+        if (Health <= 0)
+        {
+            if(OnDying != null)
+                OnDying();
         }
         
     }

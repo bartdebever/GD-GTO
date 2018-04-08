@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class SelectionManager : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class SelectionManager : MonoBehaviour
 	            Ray ray = Game.GetCurrentCamera().ScreenPointToRay(Input.mousePosition);
 	            RaycastHit hit;
                 if(Physics.Raycast(ray, out hit))
-                    if (hit.collider != null)
+                    if (hit.collider != null && EventSystem.current != null && !EventSystem.current.IsPointerOverGameObject())
                     {
                         var gameObject = hit.collider.gameObject;
                         var selectable = gameObject.GetComponent<Selectable>();
@@ -50,7 +51,7 @@ public class SelectionManager : MonoBehaviour
 	            Ray ray = Game.GetCurrentCamera().ScreenPointToRay(Input.mousePosition);
 	            RaycastHit hit;
 	            if (Physics.Raycast(ray, out hit))
-	                if (hit.collider != null)
+	                if (hit.collider != null && EventSystem.current != null && !EventSystem.current.IsPointerOverGameObject())
 	                {
 	                    var gameObject = hit.collider.gameObject;
 	                    var selectable = gameObject.GetComponent<Selectable>();

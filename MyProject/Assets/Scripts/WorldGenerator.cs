@@ -8,12 +8,10 @@ public class WorldGenerator : MonoBehaviour
     [Header("Prefabs")]
     public GameObject Tile;
     public GameObject Pickup;
-    public GameObject Enemy;
+    public List<GameObject> Enemy;
     [Header("Containers and Controllers")]
     public GridContainer Grid;
-
     public TerrainFilter TerrainFilter;
-
     public ShopScript Shop;
     public EnemyController EnemyController;
     [Header("Generation Size")]
@@ -25,8 +23,6 @@ public class WorldGenerator : MonoBehaviour
     [Header("Generation Modifiers")]
     public int PickupAmount;
     public bool GenerateHills;
-    
-
     public int Enemies;
     [Header("Cameras")] public Camera PauseCamera;
     // Use this for initialization
@@ -58,6 +54,13 @@ public class WorldGenerator : MonoBehaviour
                 this.Grid.AddTile(gameObjectTile.GetComponent<TileScript>());
             }
         }
+        GeneratePickup();
+        GenerateEnemies();
+        GenerateWalls();
+    }
+
+    private void GeneratePickup()
+    {
         var tiles = Grid.GetTiles();
         for (int i = 0; i < PickupAmount; i++)
         {
@@ -67,22 +70,26 @@ public class WorldGenerator : MonoBehaviour
                 tile.SpawnPickup(Pickup);
             }
         }
-
-        for (int i = 0; i < Enemies; i++)
+    }
+    private void GenerateEnemies()
+    {
+        var tiles = Grid.GetTiles();
+        foreach (var enemyScript in Enemy)
         {
-            var tile = tiles[Random.Range(0, tiles.Count)];
-            if (tile != null)
+            for (int i = 0; i < Enemies; i++)
             {
-                var position = tile.transform.position;
-                var enemy = Enemy.GetComponent<EnemyScript>().Initialize(position.x, position.z, position.y + 1.5f, tile.transform);
-                EnemyController.AddEnemy(enemy.GetComponent<EnemyScript>());
+                var tile = tiles[Random.Range(0, tiles.Count)];
+                if (tile != null && tile.gameObject.transform.position.x > XMin + 2 && tile.gameObject.transform.position.x < XMax - 2
+                    && tile.gameObject.transform.position.z > ZMin + 2 && tile.gameObject.transform.position.x < XMax - 2)
+                {
+                    var position = tile.transform.position;
+                    var enemy = enemyScript.GetComponent<EnemyScript>().Initialize(position.x, position.z, position.y + 1.5f, tile.transform);
+                    EnemyController.AddEnemy(enemy.GetComponent<EnemyScript>());
+                }
             }
         }
-
-        GenerateWalls();
     }
-
-    void GenerateWalls()
+    private void GenerateWalls()
     {
         for (int h = 0; h < 2; h++)
         {

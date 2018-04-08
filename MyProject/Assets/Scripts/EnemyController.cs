@@ -32,6 +32,27 @@ public class EnemyController : MonoBehaviour
                             enemy.MovementStatus = 0;
                         }
                         break;
+                    case MoveType.Rotate:
+                        switch (enemy.MovementStatus)
+                        {
+                            case 0:
+                                enemy.transform.Translate(0, 0, 1);
+                                break;
+                            case 1:
+                                enemy.transform.Translate(1, 0, 0);
+                                break;
+                            case 2:
+                                enemy.transform.Translate(0, 0, -1);
+                                break;
+                            case 3:
+                                enemy.transform.Translate(-1, 0, 0);
+                                break;
+                        }
+
+                        enemy.MovementStatus++;
+                        if (enemy.MovementStatus > 3)
+                            enemy.MovementStatus = 0;
+                        break;
                 }
             }
             catch (MissingReferenceException ex)
