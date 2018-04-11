@@ -10,20 +10,17 @@ public class TurnManagement : MonoBehaviour
     public float Bpm;
     public float Offset;
 
-    public GameObject PlayerGameObject;
-    public Color BlinkColor;
     public Button Slider1;
     public Button Slider2;
+    public Image MiddleNote;
     public GridContainer grid;
     public EnemyController EnemyController;
-    public List<PlayerScript> Players;
     public Text MultiplierDisplay;
     private float time;
-
     private bool enemyMove = false;
+    private bool beatShow = false;
 	// Use this for initialization
 	void Start () {
-        Game.AddPlayers(Players);
 	}
 	
 	// Update is called once per frame
@@ -66,6 +63,11 @@ public class TurnManagement : MonoBehaviour
 	                    EnemyController.MoveEnemies();
 	                    enemyMove = true;
 	                }
+	                if (!beatShow)
+	                {
+	                    beatShow = true;
+                        MiddleNote.gameObject.transform.localScale = new Vector3(1.1f,1.1f,1.1f);
+	                }
 
 	                
 	            }
@@ -105,19 +107,26 @@ public class TurnManagement : MonoBehaviour
 
     private PlayerScript CheckPositionForPlayer(Vector3 position)
     {
-        return Players.FirstOrDefault(x =>
+        return Game.GetPlayers().FirstOrDefault(x =>
             x.gameObject.transform.position.x.Equals(position.x) && x.gameObject.transform.position.z.Equals(position.z));
     }
 
     private void NextTurn(PlayerScript player)
     {
+        if (Game.PlayAudio())
+        {
+            var audioFromPlayer = player.GetComponentInChildren<AudioSource>();
+            if (audioFromPlayer != null && audioFromPlayer.enabled)
+                audioFromPlayer.Play();
+        }
+
         if (!player.UsedMove)
         {
             player.Multiplier = 1;
             UpdateGui(player.MultiplierText, player.Multiplier);
         }
         player.UsedMove = false;
-        if (this.Players.IndexOf(player) == Players.Count - 1)
+        if (Game.GetPlayers().IndexOf(player) == Game.GetPlayers().Count - 1)
         {
             this.time = 0.0f;
             ResetSliders();
@@ -144,13 +153,19 @@ public class TurnManagement : MonoBehaviour
                 if (playerHit.Health <= 0)
                 {
                     Destroy(playerHit.gameObject);
-                    Players.Remove(playerHit);
+                    Game.GetPlayers().Remove(playerHit);
                     return;
                 }
             }
             if (player.Multiplier <= 2)
                 player.Multiplier++;
             UpdateGui(player.MultiplierText, player.Multiplier);
+            if (beatShow)
+            {
+                MiddleNote.gameObject.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+                beatShow = false;
+            }
+
         }
 
     }
@@ -159,6 +174,7 @@ public class TurnManagement : MonoBehaviour
     {
         Slider1.transform.position = new Vector3(0, 100, 0);
         Slider2.transform.position = new Vector3(1920, 100, 0);
+
     }
 
     public void SetBpm(float value)

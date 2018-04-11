@@ -19,7 +19,8 @@ public class PlayerScript : MonoBehaviour
     public int Health = 3;
     public int Multiplier = 1;
     public int Attack = 1;
-
+    [Header("UI")] public Image Ui;
+    public Text healthText;
     private Vector3 moveBuffer = new Vector3(0, 0, 0);
 
     public delegate void Died();

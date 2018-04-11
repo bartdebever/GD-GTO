@@ -24,6 +24,7 @@ public class WorldGenerator : MonoBehaviour
     public int PickupAmount;
     public bool GenerateHills;
     public int Enemies;
+    public bool GenerateShop = false;
     [Header("Cameras")] public Camera PauseCamera;
     // Use this for initialization
     void Start ()
@@ -39,7 +40,8 @@ public class WorldGenerator : MonoBehaviour
 	        ShopX += -ZMin;
 	    else
 	        ShopX += ZMin;
-        Shop.Spawn(new Vector3(0 - Shop.XSize/2f, 0, shopZ));
+        if(GenerateShop)
+            Shop.Spawn(new Vector3(0 - Shop.XSize/2f, 0, shopZ));
         TerrainFilter.TextureTerain(Grid);
         PauseCamera.transform.position = new Vector3(0, 20, 0);
 	}

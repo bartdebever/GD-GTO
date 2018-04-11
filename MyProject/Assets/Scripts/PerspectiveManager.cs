@@ -128,6 +128,7 @@ public class PerspectiveManager : MonoBehaviour
                         camera.rect = new Rect(x, y, width, height);
                         camera.enabled = true;
                         x += width;
+                        player.Ui.gameObject.SetActive(true);
                     }
                 }
                 catch { }
@@ -144,9 +145,11 @@ public class PerspectiveManager : MonoBehaviour
         else
         {
             players[0].GetComponentInChildren<Camera>().rect = new Rect(0, 0, 1, 1);
-            for (int i = 1; i < players.Count; i++)
+            for (int i = 0; i < players.Count; i++)
             {
-                players[i].GetComponentInChildren<Camera>().enabled = false;
+                if(i>0)
+                    players[i].GetComponentInChildren<Camera>().enabled = false;
+                players[i].Ui.gameObject.SetActive(false);
             }
             SplitScreen = false;
         }
@@ -295,5 +298,6 @@ public class PerspectiveManager : MonoBehaviour
         Game.Pause();
         PlayerDefeated.gameObject.SetActive(true);
         PlayerDefeated.gameObject.GetComponentInChildren<Text>().text = playerName + " defeated!";
+        //PlayerDefeated.GetComponent<TextAnimationScript>().PlayAnimation();
     }
 }

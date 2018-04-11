@@ -14,6 +14,7 @@ public class EnemyController : MonoBehaviour
         bufferEnemies = enemies;
         foreach (var enemy in enemies)
         { 
+            if(!enemy.IsStaggered())
             try
             {
                 switch (enemy.MovementType)
@@ -58,6 +59,8 @@ public class EnemyController : MonoBehaviour
             catch (MissingReferenceException ex)
             {
             }
+            else
+                enemy.RemoveStagger();
         }
         enemies = bufferEnemies;
     }

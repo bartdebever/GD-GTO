@@ -8,6 +8,23 @@ public static class Game
     private static bool running = true;
     private static Camera currrentCamera;
     private static List<PlayerScript> players;
+    private static List<string> playerNames = new List<string>();
+    private static int numberOfPlayers = 0;
+    private static bool playAudio = false;
+
+    public static void SetNumberOfPlayers(int amount)
+    {
+        numberOfPlayers = amount;
+    }
+
+    public static void SetPlayerNames(List<string> names)
+    {
+        playerNames = names;
+    }
+    public static int GetNumberOfPlayers()
+    {
+        return numberOfPlayers;
+    }
     public static bool IsRunning()
     {
         return running;
@@ -72,5 +89,23 @@ public static class Game
         players = null;
         Play();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public static void GenerateNames()
+    {
+        for (int i = 0; i < players.Count; i++)
+        {
+            players[i].gameObject.name = playerNames[i];
+        }
+    }
+
+    public static bool PlayAudio()
+    {
+        return playAudio;
+    }
+
+    public static void SetPlayAudio(bool value)
+    {
+        playAudio = value;
     }
 }

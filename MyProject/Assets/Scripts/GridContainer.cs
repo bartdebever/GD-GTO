@@ -10,7 +10,7 @@ public class GridContainer : MonoBehaviour
     private List<TileScript> Walls;
 	// Use this for initialization
 	void Start () {
-		
+		Debug.Log(Game.GetNumberOfPlayers());
 	}
 	
 	// Update is called once per frame
